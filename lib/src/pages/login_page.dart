@@ -109,7 +109,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 20.0),
                 _createPassword(bloc),
                 const SizedBox(height: 20.0),
-                _createButton(),
+                _createButton(bloc),
               ],
             ),
           ),
@@ -153,9 +153,10 @@ class LoginPage extends StatelessWidget {
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
             decoration: InputDecoration(
-                icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
-                labelText: 'Password',
-                errorText: snapshot.error),
+              icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
+              labelText: 'Password',
+              errorText: snapshot.error,
+            ),
             onChanged: bloc.changePassword,
           ),
         );
@@ -163,18 +164,33 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _createButton() {
-    return RaisedButton(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-        child: Text('Log In'),
-      ),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusDirectional.circular(5.0)),
-      elevation: 0.0,
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      onPressed: () {},
+  Widget _createButton(LoginBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.fromValidStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return RaisedButton(
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+            child: Text('Log In'),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusDirectional.circular(5.0)),
+          elevation: 0.0,
+          color: Colors.deepPurple,
+          textColor: Colors.white,
+          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+        );
+      },
     );
+  }
+
+  _login(LoginBloc bloc, BuildContext context) {
+    print('=========================');
+    print('Emial: ${bloc.email}');
+    print('Password: ${bloc.password}');
+    print('=========================');
+
+    Navigator.pushReplacementNamed(context, 'home');
   }
 }

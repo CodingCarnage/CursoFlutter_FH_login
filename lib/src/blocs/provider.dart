@@ -4,7 +4,16 @@ import 'package:login/src/blocs/login_bloc.dart';
 export 'package:login/src/blocs/login_bloc.dart';
 
 class Provider extends InheritedWidget {
-  Provider({Key key, this.child}) : super(key: key, child: child);
+  static Provider _instance;
+
+  factory Provider ({Key key, Widget child}) {
+    if (_instance == null) {
+      _instance = new Provider._internal(key: key, child: child);
+    }
+    return _instance;
+  }
+
+  Provider._internal({Key key, this.child}) : super(key: key, child: child);
 
   final Widget child;
   final LoginBloc loginBloc = LoginBloc();

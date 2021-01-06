@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:login/src/blocs/provider.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({Key key}) : super(key: key);
 
@@ -61,7 +63,10 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 10.0, width: double.infinity),
               Text(
                 'Cesar López',
-                style: Theme.of(context).textTheme.headline5.apply(color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .apply(color: Colors.white),
               )
             ],
           ),
@@ -71,6 +76,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _loginForm(BuildContext context) {
+    final LoginBloc bloc = Provider.of(context);
     final Size size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
@@ -86,24 +92,22 @@ class LoginPage extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 30.0),
             padding: const EdgeInsets.symmetric(vertical: 50.0),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5.0),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 3.0,
-                  offset: Offset(0.0, 5.0),
-                  spreadRadius: 3.0
-                )
-              ]
-            ),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 3.0,
+                      offset: Offset(0.0, 5.0),
+                      spreadRadius: 3.0)
+                ]),
             child: Column(
               children: <Widget>[
-                Text('Log In',style: Theme.of(context).textTheme.headline6),
+                Text('Log In', style: Theme.of(context).textTheme.headline6),
                 const SizedBox(height: 50.0),
-                _createEmail(),
+                _createEmail(bloc),
                 const SizedBox(height: 20.0),
-                _createPassword(),
+                _createPassword(bloc),
                 const SizedBox(height: 20.0),
                 _createButton(),
               ],
@@ -116,52 +120,60 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _createEmail() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        cursorColor: Colors.deepPurple,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: Colors.deepPurple),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepPurple),
+  Widget _createEmail(LoginBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.emailStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            cursorColor: Colors.deepPurple,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurple)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurple)),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurple)),
+              icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
+              hintText: 'example@email.com',
+              labelText: 'Email',
+              labelStyle: TextStyle(color: Colors.deepPurple),
+              counterText: snapshot.data,
+            ),
+            onChanged: bloc.changeEmail,
           ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepPurple),
-          ),
-          icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
-          hintText: 'example@email.com',
-          labelText: 'Email',
-          labelStyle: TextStyle(color: Colors.deepPurple)
-        ),
-      ),
+        );
+      },
     );
   }
-  
-  Widget _createPassword() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        obscureText: 	true,
-        keyboardType: TextInputType.visiblePassword,
-        decoration: InputDecoration(
-          enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: Colors.deepPurple),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepPurple),
+
+  Widget _createPassword(LoginBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.passwordStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            obscureText: true,
+            keyboardType: TextInputType.visiblePassword,
+            decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurple)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurple)),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurple)),
+              icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
+              labelText: 'Password',
+              labelStyle: TextStyle(color: Colors.deepPurple),
+              counterText: snapshot.data,
+            ),
+            onChanged: bloc.changePassword,
           ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepPurple),
-          ),
-          icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
-          labelText: 'Password',
-          labelStyle: TextStyle(color: Colors.deepPurple)
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -172,8 +184,7 @@ class LoginPage extends StatelessWidget {
         child: Text('Log In'),
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusDirectional.circular(5.0)
-      ),
+          borderRadius: BorderRadiusDirectional.circular(5.0)),
       elevation: 0.0,
       color: Colors.deepPurple,
       textColor: Colors.white,

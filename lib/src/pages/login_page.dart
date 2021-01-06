@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
     final Container topBackground = Container(
       height: size.height * 0.4,
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: <Color>[
             Color.fromRGBO(63, 63, 156, 1.0),
@@ -37,7 +37,7 @@ class LoginPage extends StatelessWidget {
       height: size.height * 0.1125,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.0),
-        color: Color.fromRGBO(255, 255, 255, 0.05),
+        color: const Color.fromRGBO(255, 255, 255, 0.05),
       ),
     );
 
@@ -92,15 +92,16 @@ class LoginPage extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 30.0),
             padding: const EdgeInsets.symmetric(vertical: 50.0),
             decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5.0),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 3.0,
-                      offset: Offset(0.0, 5.0),
-                      spreadRadius: 3.0)
-                ]),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5.0),
+              boxShadow: const <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 3.0,
+                    offset: Offset(0.0, 5.0),
+                    spreadRadius: 3.0)
+              ],
+            ),
             child: Column(
               children: <Widget>[
                 Text('Log In', style: Theme.of(context).textTheme.headline6),

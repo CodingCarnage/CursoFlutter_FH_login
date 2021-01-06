@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
           'home': (BuildContext context) => HomePage(),
         },
         theme: ThemeData(
+          primaryColor: Colors.deepPurple,
           fontFamily: 'Poppins',
         ),
       ),

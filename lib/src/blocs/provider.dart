@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:login/src/blocs/login_bloc.dart';
+export 'package:login/src/blocs/login_bloc.dart';
 
 class Provider extends InheritedWidget {
   Provider({Key key, this.child}) : super(key: key, child: child);

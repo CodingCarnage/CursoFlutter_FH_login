@@ -130,16 +130,9 @@ class LoginPage extends StatelessWidget {
             cursorColor: Colors.deepPurple,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple)),
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple)),
               icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
               hintText: 'example@email.com',
               labelText: 'Email',
-              labelStyle: TextStyle(color: Colors.deepPurple),
               counterText: snapshot.data,
             ),
             onChanged: bloc.changeEmail,
@@ -159,15 +152,8 @@ class LoginPage extends StatelessWidget {
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
             decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple)),
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple)),
               icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
               labelText: 'Password',
-              labelStyle: TextStyle(color: Colors.deepPurple),
               counterText: snapshot.data,
             ),
             onChanged: bloc.changePassword,

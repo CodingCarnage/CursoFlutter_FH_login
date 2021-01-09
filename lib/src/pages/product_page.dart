@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+
+import 'package:login/src/models/product_model.dart';
+
 import 'package:login/src/utils/utils.dart' as utils;
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key key}) : super(key: key);
-
-  static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   _ProductPageState createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  ProductModel product = new ProductModel();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +37,12 @@ class _ProductPageState extends State<ProductPage> {
         child: Container(
           padding: const EdgeInsets.all(15.0),
           child: Form(
-            key: ProductPage.formKey,
+            key: formKey,
             child: Column(
               children: <Widget>[
                 _createName(),
                 _createCost(),
+                _createAvailable(),
                 _createButton(),
               ],
             ),
@@ -47,11 +54,13 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _createName() {
     return TextFormField(
+      initialValue: product.title,
       textCapitalization: TextCapitalization.sentences,
-      cursorColor: Colors.deepPurple,
+      cursorColor: Colors.deepPurpleAccent,
       decoration: InputDecoration(
         labelText: 'Product',
       ),
+      onSaved: (String value) => product.title = value,
       validator: (String value) {
         if (value.length < 3) {
           return 'Input name of the product';
@@ -64,18 +73,28 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _createCost() {
     return TextFormField(
+      initialValue: product.value.toString(),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
-      cursorColor: Colors.deepPurple,
+      cursorColor: Colors.deepPurpleAccent,
       decoration: InputDecoration(
         labelText: 'Cost',
       ),
-      validator: (value) {
+      onSaved: (String value) => product.value = double.parse(value),
+      validator: (String value) {
         if (utils.isNumeric(value)) {
           return null;
         } else {
           return 'Only numbers';
         }
       },
+    );
+  }
+
+  Widget _createAvailable() {
+    return SwitchListTile(
+      value: product.available,
+      title: Text('Available'),
+      onChanged: (bool value) => setState(() => product.available = value),
     );
   }
 
@@ -87,12 +106,17 @@ class _ProductPageState extends State<ProductPage> {
       onPressed: _submit,
       child: Text('Save'),
       textColor: Colors.white,
-      color: Colors.deepPurple,
+      color: Colors.deepPurpleAccent,
     );
   }
 
   void _submit() {
-    if (!ProductPage.formKey.currentState.validate()) return;
-    print('Form Valido');
+    if (!formKey.currentState.validate()) return;
+    
+    formKey.currentState.save();
+
+    print(product.title);
+    print(product.value);
+    print(product.available);
   }
 }

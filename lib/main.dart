@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        initialRoute: 'login',
+        initialRoute: 'home',
         routes: {
           'login' : (BuildContext context) => LoginPage(),
           'home' : (BuildContext context) => HomePage(),
@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         },
         theme: ThemeData(
           primaryColor: Colors.deepPurple,
+          accentColor: Colors.deepPurpleAccent,
           fontFamily: 'Poppins',
         ),
       ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:login/src/models/product_model.dart';
 
+import 'package:login/src/providers/product_provider.dart';
+
 import 'package:login/src/utils/utils.dart' as utils;
 
 class ProductPage extends StatefulWidget {
@@ -12,8 +14,8 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final ProductProvider productProvider = new ProductProvider();
 
   ProductModel product = new ProductModel();
 
@@ -73,15 +75,14 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _createCost() {
     return TextFormField(
-      initialValue: product.value.toString(),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       cursorColor: Colors.deepPurpleAccent,
-      decoration: InputDecoration(
-        labelText: 'Cost',
-      ),
+      decoration: InputDecoration(labelText: 'Cost', hintText: "0.0"),
       onSaved: (String value) => product.value = double.parse(value),
       validator: (String value) {
-        if (utils.isNumeric(value)) {
+        if (value.length <= 0) {
+          return 'Enter cost';
+        } else if (utils.isNumeric(value)) {
           return null;
         } else {
           return 'Only numbers';
@@ -100,9 +101,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _createButton() {
     return RaisedButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       onPressed: _submit,
       child: Text('Save'),
       textColor: Colors.white,
@@ -112,11 +111,13 @@ class _ProductPageState extends State<ProductPage> {
 
   void _submit() {
     if (!formKey.currentState.validate()) return;
-    
+
     formKey.currentState.save();
 
     print(product.title);
     print(product.value);
     print(product.available);
+
+    //productProvider.createProduct(product);
   }
 }

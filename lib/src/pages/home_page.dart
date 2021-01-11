@@ -60,8 +60,8 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      onDismissed: (direction) {
-        // TODO: Delete product
+      onDismissed: (DismissDirection direction) {
+        productProvider.deleteProduct(product.id);
       },
       child: ListTile(
         title: Text('${product.title} - ${product.value}'),

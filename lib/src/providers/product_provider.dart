@@ -31,13 +31,22 @@ class ProductProvider {
       return [];
     }
 
-    decodedData.forEach((id, product) {
-      final productTemp= ProductModel.fromJson(product);
+    decodedData.forEach((String id, dynamic product) {
+      final ProductModel productTemp= ProductModel.fromJson(product);
       productTemp.id = id;
 
       products.add(productTemp);
     });
 
     return products;
+  }
+
+  Future<int> deleteProduct(String id) async {
+    final String url = '$_url/products/$id.json';
+    final http.Response resp = await http.delete(url);
+
+    print(json.decode(resp.body));
+    
+    return 1;
   }
 }

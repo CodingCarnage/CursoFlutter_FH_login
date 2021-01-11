@@ -21,6 +21,12 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final ProductModel productData = ModalRoute.of(context).settings.arguments;
+    if (productData != null) {
+      product = productData;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Product Page'),
@@ -75,6 +81,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _createCost() {
     return TextFormField(
+      initialValue: product.value != null ? product.value.toString() : '',
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       cursorColor: Colors.deepPurpleAccent,
       decoration: InputDecoration(labelText: 'Cost', hintText: "0.0"),
@@ -118,6 +125,10 @@ class _ProductPageState extends State<ProductPage> {
     print(product.value);
     print(product.available);
 
-    //productProvider.createProduct(product);
+    if (product.id == null) {
+      productProvider.createProduct(product);
+    } else {
+      productProvider.editProduct(product);
+    }
   }
 }

@@ -8,7 +8,7 @@ class ProductModel {
     ProductModel({
         this.id,
         this.title = '',
-        this.value = 0.0,
+        this.value,
         this.available = true,
         this.imageUrl,
     });
@@ -28,7 +28,7 @@ class ProductModel {
     );
 
     Map<String, dynamic> toJson() => {
-        "id": id,
+        //"id": id,
         "title": title,
         "value": value,
         "available": available,

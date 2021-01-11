@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
 
   static final ProductProvider productProvider = new ProductProvider();
-    
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,11 +32,42 @@ class HomePage extends StatelessWidget {
       future: productProvider.loadProducts(),
       builder: (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
         if (snapshot.hasData) {
-          return Container();
+          final List<ProductModel> products = snapshot.data;
+
+          return ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (BuildContext context, int index) =>
+                _createItem(context, products[index]),
+          );
         } else {
           return Center(child: CircularProgressIndicator());
         }
       },
+    );
+  }
+
+  Widget _createItem(BuildContext context, ProductModel product) {
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.startToEnd,
+      background: Container(
+        color: Colors.red,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 17.5, horizontal: 7.5),
+          child: FittedBox(
+            alignment: Alignment.centerLeft, 
+            child: Icon(Icons.delete, color: Colors.white),
+          ),
+        ),
+      ),
+      onDismissed: (direction) {
+        // TODO: Delete product
+      },
+      child: ListTile(
+        title: Text('${product.title} - ${product.value}'),
+        subtitle: Text(product.id),
+        onTap: () => Navigator.pushNamed(context, 'product'),
+      ),
     );
   }
 }

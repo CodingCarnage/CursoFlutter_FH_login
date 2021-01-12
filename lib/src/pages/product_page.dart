@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:login/src/models/product_model.dart';
 
@@ -20,6 +23,7 @@ class _ProductPageState extends State<ProductPage> {
 
   ProductModel product = new ProductModel();
   bool _isSaving = false;
+  File image;
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +39,11 @@ class _ProductPageState extends State<ProductPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.photo_size_select_actual),
-            onPressed: () {},
+            onPressed: _selectImage,
           ),
           IconButton(
             icon: Icon(Icons.camera_alt),
-            onPressed: () {},
+            onPressed: _takeImage,
           ),
         ],
       ),
@@ -50,6 +54,7 @@ class _ProductPageState extends State<ProductPage> {
             key: formKey,
             child: Column(
               children: <Widget>[
+                _showImage(),
                 _createName(),
                 _createCost(),
                 _createAvailable(),
@@ -154,5 +159,39 @@ class _ProductPageState extends State<ProductPage> {
     );
 
     scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  Widget _showImage() {
+    if (product.imageUrl != null) {
+      // TODO: I need to maker this,
+      return Container();
+    } else {
+      return Image(
+        image: image != null ? FileImage(image) : AssetImage('assets/images/no-image.png'),
+        height: 300.0,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+  
+  _selectImage() async {
+    _processImage(ImageSource.gallery);
+  }
+
+  _takeImage() async {
+    _processImage(ImageSource.camera);
+  }
+
+  _processImage(ImageSource source) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final PickedFile pickedFile = await imagePicker.getImage(source: source);
+
+    setState(() {
+      if (pickedFile != null) {
+        image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }

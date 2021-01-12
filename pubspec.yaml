@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   rxdart: ^0.25.0
   http:
+  image_picker: ^0.6.7+21
 
 dev_dependencies:
   flutter_test:

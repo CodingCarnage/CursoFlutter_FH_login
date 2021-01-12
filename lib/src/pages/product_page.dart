@@ -15,19 +15,21 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final ProductProvider productProvider = new ProductProvider();
 
   ProductModel product = new ProductModel();
+  bool _isSaving = false;
 
   @override
   Widget build(BuildContext context) {
-
     final ProductModel productData = ModalRoute.of(context).settings.arguments;
     if (productData != null) {
       product = productData;
     }
 
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Product Page'),
         actions: <Widget>[
@@ -84,7 +86,10 @@ class _ProductPageState extends State<ProductPage> {
       initialValue: product.value != null ? product.value.toString() : '',
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       cursorColor: Colors.deepPurpleAccent,
-      decoration: InputDecoration(labelText: 'Cost', hintText: "0.0"),
+      decoration: InputDecoration(
+        labelText: 'Cost',
+        hintText: "0.0",
+      ),
       onSaved: (String value) => product.value = double.parse(value),
       validator: (String value) {
         if (value.length <= 0) {
@@ -109,7 +114,7 @@ class _ProductPageState extends State<ProductPage> {
   Widget _createButton() {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      onPressed: _submit,
+      onPressed: _isSaving ? null : _submit,
       child: Text('Save'),
       textColor: Colors.white,
       color: Colors.deepPurpleAccent,
@@ -121,14 +126,33 @@ class _ProductPageState extends State<ProductPage> {
 
     formKey.currentState.save();
 
-    print(product.title);
-    print(product.value);
-    print(product.available);
+    setState(() {
+      _isSaving = true;
+    });
 
     if (product.id == null) {
       productProvider.createProduct(product);
     } else {
       productProvider.editProduct(product);
     }
+
+    /*
+    setState(() {
+      _isSaving = false;
+    });
+    */
+    
+    showSnackBar('Registro exitoso');
+
+    Navigator.pop(context);
+  }
+
+  void showSnackBar(String message) {
+    final SnackBar snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 1500),
+    );
+
+    scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

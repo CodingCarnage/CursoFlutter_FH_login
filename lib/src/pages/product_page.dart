@@ -126,7 +126,7 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  void _submit() {
+  void _submit() async {
     if (!formKey.currentState.validate()) return;
 
     formKey.currentState.save();
@@ -135,17 +135,15 @@ class _ProductPageState extends State<ProductPage> {
       _isSaving = true;
     });
 
+    if (image != null) {
+      product.imageUrl = await productProvider.uploadImage(image);
+    }
+
     if (product.id == null) {
       productProvider.createProduct(product);
     } else {
       productProvider.editProduct(product);
     }
-
-    /*
-    setState(() {
-      _isSaving = false;
-    });
-    */
     
     showSnackBar('Registro exitoso');
 

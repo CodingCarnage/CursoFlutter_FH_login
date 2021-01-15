@@ -5,6 +5,7 @@ import 'package:login/src/blocs/provider.dart';
 import 'package:login/src/pages/login_page.dart';
 import 'package:login/src/pages/home_page.dart';
 import 'package:login/src/pages/product_page.dart';
+import 'package:login/src/pages/sign_up_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,11 +16,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        initialRoute: 'home',
+        initialRoute: 'login',
         routes: {
           'login' : (BuildContext context) => LoginPage(),
           'home' : (BuildContext context) => HomePage(),
           'product' : (BuildContext context) => ProductPage(),
+          'signup' : (BuildContext context) => SignUpPage(),
         },
         theme: ThemeData(
           primaryColor: Colors.deepPurple,

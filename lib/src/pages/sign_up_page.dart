@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:login/src/blocs/provider.dart';
+import 'package:login/src/providers/user_provider.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key key}) : super(key: key);
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({Key key}) : super(key: key);
+
+  static final UserProvider userProvider = new UserProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +107,7 @@ class LoginPage extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                Text('Log In', style: Theme.of(context).textTheme.headline6),
+                Text('Sign Up', style: Theme.of(context).textTheme.headline6),
                 const SizedBox(height: 50.0),
                 _createEmail(bloc),
                 const SizedBox(height: 20.0),
@@ -114,10 +117,9 @@ class LoginPage extends StatelessWidget {
               ],
             ),
           ),
-          Text('Forgot password?'),
           FlatButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, 'signup'),
-            child: Text('Sign Up'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+            child: Text('Already have an account?, Log In'),
           ),
           const SizedBox(height: 100.0)
         ],
@@ -184,18 +186,15 @@ class LoginPage extends StatelessWidget {
           elevation: 0.0,
           color: Colors.deepPurple,
           textColor: Colors.white,
-          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+          onPressed: snapshot.hasData ? () => _signup(bloc, context) : null,
         );
       },
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) {
-    print('=========================');
-    print('Emial: ${bloc.email}');
-    print('Password: ${bloc.password}');
-    print('=========================');
+  _signup(LoginBloc bloc, BuildContext context) {
+    userProvider.newUser(bloc.email, bloc.password);
 
-    Navigator.pushReplacementNamed(context, 'home');
+    //Navigator.pushReplacementNamed(context, 'home');
   }
 }

@@ -144,7 +144,7 @@ class _ProductPageState extends State<ProductPage> {
     } else {
       productProvider.editProduct(product);
     }
-    
+
     showSnackBar('Registro exitoso');
 
     Navigator.pop(context);
@@ -161,17 +161,23 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _showImage() {
     if (product.imageUrl != null) {
-      // TODO: I need to maker this,
-      return Container();
+      return FadeInImage(
+        placeholder: AssetImage('assets/images/jar-loading.gif'),
+        image: NetworkImage(product.imageUrl),
+        height: 300.0,
+        fit: BoxFit.contain,
+      );
     } else {
       return Image(
-        image: image != null ? FileImage(image) : AssetImage('assets/images/no-image.png'),
+        image: image != null
+            ? FileImage(image)
+            : AssetImage('assets/images/no-image.png'),
         height: 300.0,
         fit: BoxFit.cover,
       );
     }
   }
-  
+
   _selectImage() async {
     _processImage(ImageSource.gallery);
   }
@@ -187,6 +193,7 @@ class _ProductPageState extends State<ProductPage> {
     setState(() {
       if (pickedFile != null) {
         image = File(pickedFile.path);
+        product.imageUrl = null;
       } else {
         print('No image selected.');
       }

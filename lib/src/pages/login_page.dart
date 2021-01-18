@@ -6,10 +6,18 @@ import 'package:login/src/providers/user_provider.dart';
 
 import 'package:login/src/utils/utils.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
 
   static final UserProvider userProvider = new UserProvider();
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isVerifying = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,19 +197,29 @@ class LoginPage extends StatelessWidget {
           elevation: 0.0,
           color: Colors.deepPurple,
           textColor: Colors.white,
-          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+          onPressed: snapshot.hasData && _isVerifying == false
+              ? () => _login(bloc, context)
+              : null,
         );
       },
     );
   }
 
   _login(LoginBloc bloc, BuildContext context) async {
-    Map info = await userProvider.loginUser(bloc.email, bloc.password);
+    setState(() {
+      _isVerifying = true;
+    });
+
+    Map info =
+        await LoginPage.userProvider.loginUser(bloc.email, bloc.password);
 
     if (info['ok']) {
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       showAlert(context, info['message']);
+      setState(() {
+        _isVerifying = false;
+      });
     }
   }
 }

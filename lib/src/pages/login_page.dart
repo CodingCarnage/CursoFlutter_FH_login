@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 10.0, width: double.infinity),
               Text(
-                'Cesar López',
+                'Your Business',
                 style: Theme.of(context)
                     .textTheme
                     .headline5

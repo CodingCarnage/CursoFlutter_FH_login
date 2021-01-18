@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:login/src/blocs/provider.dart';
+
 import 'package:login/src/providers/user_provider.dart';
+
+import 'package:login/src/utils/utils.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key key}) : super(key: key);
@@ -192,9 +195,13 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  _signup(LoginBloc bloc, BuildContext context) {
-    userProvider.newUser(bloc.email, bloc.password);
+  _signup(LoginBloc bloc, BuildContext context) async {
+    final info = await userProvider.newUser(bloc.email, bloc.password);
 
-    //Navigator.pushReplacementNamed(context, 'home');
+    if (info['ok']) {
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      showAlert(context, info['message']);
+    }
   }
 }

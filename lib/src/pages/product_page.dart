@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
 
-import 'package:login/src/models/product_model.dart';
+import 'package:login/src/blocs/provider.dart';
 
-import 'package:login/src/providers/product_provider.dart';
+import 'package:login/src/models/product_model.dart';
 
 import 'package:login/src/utils/utils.dart' as utils;
 
@@ -19,14 +19,16 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final ProductProvider productProvider = new ProductProvider();
-
+  
+  ProductsBloc productsBloc;
   ProductModel product = new ProductModel();
   bool _isSaving = false;
   File image;
 
   @override
   Widget build(BuildContext context) {
+    productsBloc = Provider.productsBloc(context);
+
     final ProductModel productData = ModalRoute.of(context).settings.arguments;
     if (productData != null) {
       product = productData;
@@ -136,13 +138,13 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     if (image != null) {
-      product.imageUrl = await productProvider.uploadImage(image);
+      product.imageUrl = await productsBloc.uploadImage(image);
     }
 
     if (product.id == null) {
-      productProvider.createProduct(product);
+      productsBloc.addProduct(product);
     } else {
-      productProvider.editProduct(product);
+      productsBloc.editProduct(product);
     }
 
     showSnackBar('Registro exitoso');

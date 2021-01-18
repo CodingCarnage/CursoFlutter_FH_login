@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:login/src/blocs/provider.dart';
+
 import 'package:login/src/providers/user_provider.dart';
+
+import 'package:login/src/utils/utils.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -192,8 +195,13 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) {
-    userProvider.loginUser(bloc.email, bloc.password);
-    //Navigator.pushReplacementNamed(context, 'home');
+  _login(LoginBloc bloc, BuildContext context) async {
+    Map info = await userProvider.loginUser(bloc.email, bloc.password);
+
+    if (info['ok']) {
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      showAlert(context, info['message']);
+    }
   }
 }

@@ -1,8 +1,27 @@
+import 'package:flutter/material.dart';
+
 bool isNumeric(String value) {
-  if (value.isEmpty)
-    return false;
+  if (value.isEmpty) return false;
 
   final num tryParseValue = num.tryParse(value);
 
   return (tryParseValue == null) ? false : true;
+}
+
+void showAlert(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Incorrect information'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Ok'),
+          )
+        ],
+      );
+    },
+  );
 }

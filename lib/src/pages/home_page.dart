@@ -64,13 +64,6 @@ class _HomePageState extends State<HomePage> {
       direction: DismissDirection.startToEnd,
       background: Container(
         color: Colors.red,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 17.5, horizontal: 7.5),
-          child: FittedBox(
-            alignment: Alignment.centerLeft,
-            child: Icon(Icons.delete, color: Colors.white),
-          ),
-        ),
       ),
       onDismissed: (DismissDirection direction) {
         productsBloc.deleteProduct(product.id);
@@ -79,24 +72,51 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: <Widget>[
             (product.imageUrl == null)
-                ? Image(image: AssetImage('assets/images/no-image.png'))
+                ? GestureDetector(
+                    child:
+                        Image(image: AssetImage('assets/images/no-image.png')),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'product',
+                              arguments: product)
+                          .then((value) {
+                        setState(() {});
+                      });
+                    },
+                  )
                 : OptimizedCacheImage(
                     imageUrl: product.imageUrl,
                     imageBuilder: (context, imageProvider) {
-                      return Image(image: imageProvider);
+                      return GestureDetector(
+                        child: Image(
+                          image: imageProvider,
+                          height: 300.0,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'product',
+                                  arguments: product)
+                              .then((value) {
+                            setState(() {});
+                          });
+                        },
+                      );
                     },
-                    placeholder: (context, url) => CircularProgressIndicator(),
+                    placeholder: (context, url) => Image(
+                      image: AssetImage('assets/images/jar-loading.gif'),
+                      height: 300.0,
+                      fit: BoxFit.cover,
+                    ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
             ListTile(
-                title: Text('${product.title} - ${product.value}'),
-                subtitle: Text(product.id),
-                onTap: () {
-                  Navigator.pushNamed(context, 'product', arguments: product)
-                      .then((value) {
-                    setState(() {});
-                  });
-                })
+              title: Text('${product.title} - ${product.value}'),
+              subtitle: Text(product.id),
+              onTap: () {
+                Navigator.pushNamed(context, 'product', arguments: product)
+                    .then((value) {
+                  setState(() {});
+                });
+              },
+            )
           ],
         ),
       ),

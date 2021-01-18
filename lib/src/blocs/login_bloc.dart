@@ -6,8 +6,8 @@ import 'package:login/src/blocs/validators.dart';
 
 
 class LoginBloc with Validators {
-  final BehaviorSubject _emailController = BehaviorSubject<String>();
-  final BehaviorSubject _passwordController = BehaviorSubject<String>();
+  final BehaviorSubject<String> _emailController = BehaviorSubject<String>();
+  final BehaviorSubject<String> _passwordController = BehaviorSubject<String>();
   
   // Get values from the stream.
   Stream<String> get emailStream => _emailController.stream.transform(validateEmail);
